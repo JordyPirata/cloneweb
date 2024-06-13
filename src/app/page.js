@@ -1,113 +1,272 @@
+"use client";
+import Link from "next/link";
+import {
+  Badge,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Chip,
+  CircularProgress,
+  Input,
+  Progress,
+} from "@nextui-org/react";
 import Image from "next/image";
+import { LowPriceIcon } from "./components/icons/low-price-product";
+import { BuyProtected } from "./components/icons/buy-protected";
+import { TopSale } from "./components/icons/top-sale";
+import { RegistrationDa } from "./components/icons/registration-da";
+import { Location } from "./components/icons/location";
+import { LogoMercadoLibre } from "./components/icons/LogoMercadoLibre";
+import { useEffect, useState } from "react";
+import Carousel from "./components/carousel";
+import Navbar from "./components/navbar";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+export default function Component() {
+  const [hydrated, setHydrated] = useState(false);
+  const images = [
+    "https://http2.mlstatic.com/storage/splinter-admin/o:f_webp,q_auto:best/1717445259308-abr24mlmhotsalepreviakvcelebritydescuentomsidesktopx340px2x.png",
+    "https://http2.mlstatic.com/storage/splinter-admin/1717431495033-mercadolibredesktopsinfechas.png",
+  ];
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return (
+      <div className="flex items-center justify-center min-h-screen min-w-full">
+        <Progress
+          size="sm"
+          isIndeterminate
+          aria-label="Cargando..."
+          className="max-w-md"
         />
       </div>
+    );
+  }
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+  return (
+    <div>
+      <Navbar>
+        <div className="py-8">
+          <Carousel images={images} size={5000} />
+        </div>
+        <div className="grid grid-cols-5 gap-4 pb-8">
+          <Card className="bg-white" isPressable>
+            <CardHeader className="justify-center">
+              <div className="grid grid-cols-1 justify-items-center">
+                <p className="text-left">Ingresar a tu cuenta</p>
+                <RegistrationDa className="h-12 w-12 justify-self-center" />
+              </div>
+            </CardHeader>
+            <CardBody className="text-center">
+              <p>Disfruta de ofertas y compra sin límites</p>
+            </CardBody>
+            <CardFooter className="justify-center">
+              <Button color="primary" variant="flat">
+                Ingresar a tu cuenta
+              </Button>
+            </CardFooter>
+          </Card>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+          <Card className="bg-white" isPressable>
+            <CardHeader className="justify-center">
+              <div className="grid grid-cols-1 justify-items-center">
+                <p className="text-left">Ingresa tu ubicación</p>
+                <Location className="h-12 w-12 justify-self-center" />
+              </div>
+            </CardHeader>
+            <CardBody className="text-center">
+              <p>Consulta costos y tiempos de entrega</p>
+            </CardBody>
+            <CardFooter className="justify-center">
+              <Button color="primary" variant="flat">
+                Ingresa ubicación
+              </Button>
+            </CardFooter>
+          </Card>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+          <Card className="bg-white" isPressable>
+            <CardHeader className="justify-center">
+              <div className="grid grid-cols-1 justify-items-center">
+                <p className="text-center">Menos de $500</p>
+                <LowPriceIcon
+                  size={window.innerWidth < 768 ? 100 : 150}
+                  className="h-12 w-12 justify-self-center"
+                />
+              </div>
+            </CardHeader>
+            <CardBody className="text-center justify-items-center">
+              <p>Descubre productos con precios bajos</p>
+            </CardBody>
+            <CardFooter className="justify-center">
+              <Button color="primary" variant="flat">
+                Mostrar productos
+              </Button>
+            </CardFooter>
+          </Card>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+          <Card className="bg-white" isPressable>
+            <CardHeader className="justify-center">
+              <div className="grid grid-cols-1 justify-items-center">
+                <p className="text-center">Más vendidos</p>
+                <TopSale size={150} className="h-12 w-12 justify-self-center" />
+              </div>
+            </CardHeader>
+            <CardBody className="text-center">
+              <p>Explora los productos que son tendencia</p>
+            </CardBody>
+            <CardFooter className="justify-center">
+              <Button color="primary" variant="flat">
+                Ir a Más vendidos
+              </Button>
+            </CardFooter>
+          </Card>
+
+          <Card className="bg-white" isPressable>
+            <CardHeader className="justify-center">
+              <div className="grid grid-cols-1 justify-items-center">
+                <p className="text-center">Compra protegida</p>
+                <BuyProtected
+                  size={150}
+                  className="h-12 w-12 justify-self-center"
+                />
+              </div>
+            </CardHeader>
+            <CardBody className="text-center">
+              <p>Puedes devolver tu compra gratis</p>
+            </CardBody>
+            <CardFooter className="justify-center">
+              <Button color="primary" variant="flat">
+                Cómo funciona
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+        <section className="bg-white p-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold">Oferta del día</h2>
+            <Button variant="ghost">Ofertas</Button>
+            <Button variant="ghost">Mostrar todas las ofertas</Button>
+            <LayoutGridIcon className="text-black" />
+          </div>
+          <div className="grid grid-cols-4 gap-4 mt-4">
+            {[...Array(4)].map((_, index) => (
+              <Card key={index} className="w-full">
+                <CardBody>
+                  <div className="grid grid-cols-1 justify-items-center">
+                    <Image
+                      src="/placeholder.svg"
+                      width={200}
+                      height={200}
+                      alt="Product"
+                    />
+                    <p>Product Name</p>
+                    <p>$ Price</p>
+                    <Button variant="ghost">Ver producto</Button>
+                  </div>
+                </CardBody>
+              </Card>
+            ))}
+          </div>
+        </section>
+        <footer className="py-4">
+          <p className="text-center text-sm text-black">Oferta del día</p>
+          <div className="flex justify-center space-x-4">
+            <Link href="#" className="text-sm text-black" prefetch={false}>
+              Ofertas
+            </Link>
+            <Link href="#" className="text-sm text-black" prefetch={false}>
+              Mostrar todas las ofertas
+            </Link>
+          </div>
+        </footer>
+      </Navbar>
+    </div>
+  );
+}
+
+function ArrowLeftIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m12 19-7-7 7-7" />
+      <path d="M19 12H5" />
+    </svg>
+  );
+}
+
+function ArrowRightIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
+  );
+}
+
+function ShoppingCartIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="8" cy="21" r="1" />
+      <circle cx="19" cy="21" r="1" />
+      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+    </svg>
+  );
+}
+
+function LayoutGridIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="7" height="7" x="3" y="3" rx="1" />
+      <rect width="7" height="7" x="14" y="3" rx="1" />
+      <rect width="7" height="7" x="14" y="14" rx="1" />
+      <rect width="7" height="7" x="3" y="14" rx="1" />
+    </svg>
   );
 }
