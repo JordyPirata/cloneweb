@@ -17,6 +17,7 @@ import {
   addPlaylist,
   addSongToPlaylist,
   db,
+  deletePlaylist,
   getPlaylists,
   getSongs,
   uploadMP3File,
@@ -24,6 +25,8 @@ import {
 import PlaylistAddModal from "../components/PlaylistAddModal";
 import { Snackbar } from "@material-ui/core";
 import SelectPlaylist from "../components/SelectPlaylist";
+import { Save } from "@material-ui/icons";
+import { Trash2 } from "lucide-react";
 
 export default function MercadoMusic() {
   const {
@@ -130,25 +133,38 @@ export default function MercadoMusic() {
     }
   };
 
+  const handleRemoveFromPlaylist = async (index) => {
+    // Aquí puedes implementar la lógica para eliminar una canción de la playlist
+    const song = currentPlaylist[index];
+    const newPlaylist = currentPlaylist.filter((_, i) => i !== index);
+    setCurrentPlaylist(newPlaylist);
+    setPlaylists((prevPlaylists) =>
+      prevPlaylists.map((playlist) =>
+        playlist.id === playlistId
+          ? {
+              ...playlist,
+              songs:
+                playlist.songs.length > 2
+                  ? playlist.songs.filter((item) => item !== song)
+                  : playlist.songs,
+            }
+          : playlist
+      )
+    );
+    showAlert("Canción eliminada de la playlist", 3000);
+  };
+
   return (
     <div className="flex flex-col h-screen bg-gradient-to-b from-[#ffe600] via-slate-50 to-slate-50 text-white">
       <header className="bg-[#ffe600] py-4 px-6 flex items-center justify-between">
         <nav className="flex items-center space-x-6">
           <Link
-            href="#"
+            href="/"
             className="font-bold text-black text-lg"
             prefetch={false}
           >
             MercadoMusic
           </Link>
-          <div className="relative">
-            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Buscar"
-              className="bg-white text-black rounded-full pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
         </nav>
         <div>
           {user ? (
@@ -193,18 +209,41 @@ export default function MercadoMusic() {
           <h2 className="text-xl font-bold">Tus Listas de Reproducción</h2>
           <div className="space-y-2">
             {playlists.map((playlist) => (
-              <Link
+              <div
                 key={playlist.id}
                 href="#"
                 className="block hover:bg-gray-200 rounded-md p-2"
                 prefetch={false}
-                onClick={() => setCurrentPlaylist(playlist.songs)}
+                onClick={() => {
+                  playlist.songs.length > 0
+                    ? setCurrentPlaylist(playlist.songs)
+                    : showAlert("La playlist no contiene canciones", 3000);
+                }}
               >
-                <h3 className="font-medium">{playlist.name}</h3>
-                <p className="text-gray-400 text-sm">{`${
-                  playlist.songs.length || 0
-                } canciones`}</p>
-              </Link>
+                <div className="grid grid-cols-2 ">
+                  <div>
+                    <h3 className="font-medium">{playlist.name}</h3>
+                    <p className="text-gray-400 text-sm">{`${
+                      playlist.songs.length || 0
+                    } canciones`}</p>
+                  </div>
+                  <Button
+                    variant="bordered"
+                    color="danger"
+                    isIconOnly
+                    className="justify-self-end"
+                    aria-label="deletePlaylist"
+                    onClick={() => {
+                      deletePlaylist(playlist.id);
+                      setPlaylists(
+                        playlists.filter((item) => item.id !== playlist.id)
+                      );
+                    }}
+                  >
+                    <Trash2 />
+                  </Button>
+                </div>
+              </div>
             ))}
           </div>
 
@@ -237,12 +276,30 @@ export default function MercadoMusic() {
             playlist={currentPlaylist || playlist}
             onSelect={handleSelectTrack}
             onAddToPlaylist={handleAddToPlaylist}
+            isPlaylist
+            onRemoveFromPlaylist={handleRemoveFromPlaylist}
           />
           {alertMessage && (
             <div className="opacity-75 fixed text-sm top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-xl p-8 shadow-lg z-50">
               {alertMessage}
             </div>
           )}
+        </div>
+        <div className="flex flex-col bg-white text-black justify-center items-center  border-x-large border-y-large border-y-gray-300 border-x-gray-300 rounded-lg p-4 space-y-4">
+          <h2 className="text-xl font-bold">Subir Canciones</h2>
+          <input
+            type="file"
+            accept=".mp3"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileUpload}
+          />
+          <Button
+            startContent={<Save />}
+            onClick={() => fileInputRef.current.click()}
+          >
+            Subir MP3
+          </Button>
         </div>
       </div>
 
@@ -265,16 +322,6 @@ export default function MercadoMusic() {
             {alertMessage}
           </div>
         )}
-      </div>
-      <div>
-        <input
-          type="file"
-          accept=".mp3"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          onChange={handleFileUpload}
-        />
-        <button onClick={() => fileInputRef.current.click()}>Subir MP3</button>
       </div>
     </div>
   );

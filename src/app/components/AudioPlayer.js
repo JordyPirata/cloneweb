@@ -12,12 +12,16 @@ const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
   const [currentTrack, setCurrentTrack] = useState(initialTrack);
   const [isShuffle, setIsShuffle] = useState(false);
   const [isRepeat, setIsRepeat] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [volume, setVolume] = useState(100); // Default volume to 100%
   const audioRef = useRef(null);
 
   useEffect(() => {
     const audio = audioRef.current;
-    const updateProgress = () =>
+    const updateProgress = () => {
       setProgress((audio.currentTime / audio.duration) * 100);
+      setCurrentTime(audio.currentTime);
+    };
     const updateTrackInfo = () => {
       setTrackInfo({
         title: playlist[currentTrack].title,
@@ -36,6 +40,7 @@ const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
 
   useEffect(() => {
     setProgress(0);
+    setCurrentTime(0);
     if (audioRef.current) {
       audioRef.current.load();
       if (isPlaying) {
@@ -58,6 +63,12 @@ const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
     const audio = audioRef.current;
     audio.currentTime = (audio.duration / 100) * newValue;
     setProgress(newValue);
+  };
+
+  const handleVolumeChange = (event, newValue) => {
+    const audio = audioRef.current;
+    audio.volume = newValue / 100;
+    setVolume(newValue);
   };
 
   const handleNext = () => {
@@ -84,6 +95,12 @@ const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
     setIsRepeat((prev) => !prev);
   };
 
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+
   return (
     <div
       style={{
@@ -98,8 +115,7 @@ const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
         <h2>{trackInfo.title}</h2>
         <p>
           Duration:{" "}
-          {trackInfo.duration ? (trackInfo.duration / 60).toFixed(2) : "0.00"}{" "}
-          minutes
+          {trackInfo.duration ? formatTime(trackInfo.duration) : "0:00"} minutes
         </p>
       </div>
       <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
@@ -117,6 +133,7 @@ const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
           onChange={handleProgressChange}
           style={{ flex: 1 }}
         />
+        <p className="ml-2"> {formatTime(currentTime)}</p>
         <IconButton onClick={toggleShuffle} variant="ghost" size="icon">
           <ShuffleIcon
             className="w-6 h-6"
@@ -129,6 +146,11 @@ const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
             color={isRepeat ? "primary" : "inherit"}
           />
         </IconButton>
+        <Slider
+          value={volume}
+          onChange={handleVolumeChange}
+          style={{ width: 100 }}
+        />
       </div>
     </div>
   );

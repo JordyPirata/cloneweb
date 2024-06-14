@@ -678,3 +678,12 @@ export const getSongs = async () => {
     throw error;
   }
 };
+
+export const deletePlaylist = async (playlistId) => {
+  try {
+    await deleteDoc(doc(db, "playlists", playlistId));
+    console.log("Playlist eliminada correctamente:", playlistId);
+  } catch (e) {
+    console.error("Error al eliminar la playlist:", e);
+  }
+};
