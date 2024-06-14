@@ -687,3 +687,22 @@ export const deletePlaylist = async (playlistId) => {
     console.error("Error al eliminar la playlist:", e);
   }
 };
+
+export const removeSongFromPlaylist = async (playlistId, songIndex) => {
+  try {
+    const playlistRef = doc(db, "playlists", playlistId);
+    const playlistDoc = await getDoc(playlistRef);
+    const playlistData = playlistDoc.data();
+
+    if (!playlistData.songs) {
+      playlistData.songs = [];
+    }
+
+    playlistData.songs.splice(songIndex, 1);
+
+    await updateDoc(playlistRef, { songs: playlistData.songs });
+    console.log("Canción eliminada de la playlist:", playlistRef.id);
+  } catch (e) {
+    console.error("Error al eliminar la canción:", e);
+  }
+};

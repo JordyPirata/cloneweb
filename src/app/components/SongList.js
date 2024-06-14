@@ -61,7 +61,10 @@ const SongList = ({
                   variant="bordered"
                   color="danger"
                   isIconOnly
-                  onClick={() => onRemoveFromPlaylist(index)}
+                  onClick={() => {
+                    if (filteredPlaylist.length > 1)
+                      onRemoveFromPlaylist(index);
+                  }}
                 >
                   <Trash2 />
                 </Button>

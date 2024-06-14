@@ -20,6 +20,7 @@ import {
   deletePlaylist,
   getPlaylists,
   getSongs,
+  removeSongFromPlaylist,
   uploadMP3File,
 } from "../lib/firebase/firebase";
 import PlaylistAddModal from "../components/PlaylistAddModal";
@@ -48,6 +49,7 @@ export default function MercadoMusic() {
       url: "",
     },
   ]);
+  const [currentPlaylistId, setCurrentPlaylistId] = useState("");
   const [playlist, setPlaylist] = useState([
     {
       title: "",
@@ -120,6 +122,7 @@ export default function MercadoMusic() {
     try {
       await addSongToPlaylist(playlistId.target.value, songAddPlaylist);
       showAlert("Canción añadida a la playlist", 3000);
+      setCurrentPlaylist((prevPlaylist) => [...prevPlaylist, songAddPlaylist]);
       setPlaylists((prevPlaylists) =>
         prevPlaylists.map((playlist) =>
           playlist.id === playlistId.target.value
@@ -135,23 +138,26 @@ export default function MercadoMusic() {
 
   const handleRemoveFromPlaylist = async (index) => {
     // Aquí puedes implementar la lógica para eliminar una canción de la playlist
-    const song = currentPlaylist[index];
-    const newPlaylist = currentPlaylist.filter((_, i) => i !== index);
-    setCurrentPlaylist(newPlaylist);
-    setPlaylists((prevPlaylists) =>
-      prevPlaylists.map((playlist) =>
-        playlist.id === playlistId
-          ? {
-              ...playlist,
-              songs:
-                playlist.songs.length > 2
-                  ? playlist.songs.filter((item) => item !== song)
-                  : playlist.songs,
-            }
-          : playlist
-      )
-    );
-    showAlert("Canción eliminada de la playlist", 3000);
+    try {
+      const song = currentPlaylist[index];
+      const newPlaylist = currentPlaylist.filter((_, i) => i !== index);
+      setCurrentPlaylist(newPlaylist);
+      setPlaylists((prevPlaylists) =>
+        prevPlaylists.map((playlist) =>
+          playlist.id === currentPlaylistId
+            ? {
+                ...playlist,
+                songs:
+                  playlist.songs.length > 1
+                    ? playlist.songs.filter((item) => item !== song)
+                    : playlist.songs,
+              }
+            : playlist
+        )
+      );
+      await removeSongFromPlaylist(currentPlaylistId, index);
+      showAlert("Canción eliminada de la playlist", 3000);
+    } catch (error) {}
   };
 
   return (
@@ -216,7 +222,8 @@ export default function MercadoMusic() {
                 prefetch={false}
                 onClick={() => {
                   playlist.songs.length > 0
-                    ? setCurrentPlaylist(playlist.songs)
+                    ? (setCurrentPlaylist(playlist.songs),
+                      setCurrentPlaylistId(playlist.id))
                     : showAlert("La playlist no contiene canciones", 3000);
                 }}
               >
