@@ -26,6 +26,7 @@ import Navbar from "./components/navbar";
 import { fetchProducts } from "./lib/firebase/firebase";
 import ModalDetailsProduct from "./products/Components/ModalDetailsProduct";
 import { useCart } from "./lib/context/CartContext";
+import { useRouter } from "next/navigation";
 
 export default function Component() {
   const [hydrated, setHydrated] = useState(false);
@@ -39,6 +40,7 @@ export default function Component() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { addToCart, cart } = useCart();
   const [alertMessage, setAlertMessage] = useState("");
+  const router = useRouter();
 
   const showAlert = (message, delay) => {
     setAlertMessage(message);
@@ -121,7 +123,13 @@ export default function Component() {
         </div>
 
         <div className="grid grid-cols-5 gap-4 pb-8">
-          <Card className="bg-white" isPressable>
+          <Card
+            className="bg-white"
+            isPressable
+            onPress={() => {
+              router.push("/login");
+            }}
+          >
             <CardHeader className="justify-center">
               <div className="grid grid-cols-1 justify-items-center">
                 <p className="text-left">Ingresar a tu cuenta</p>
@@ -132,7 +140,11 @@ export default function Component() {
               <p>Disfruta de ofertas y compra sin límites</p>
             </CardBody>
             <CardFooter className="justify-center">
-              <Button color="primary" variant="flat">
+              <Button
+                color="primary"
+                variant="flat"
+                onClick={() => router.push("/login")}
+              >
                 Ingresar a tu cuenta
               </Button>
             </CardFooter>
@@ -155,7 +167,11 @@ export default function Component() {
             </CardFooter>
           </Card>
 
-          <Card className="bg-white" isPressable>
+          <Card
+            className="bg-white"
+            isPressable
+            onPress={() => router.push("/products")}
+          >
             <CardHeader className="justify-center">
               <div className="grid grid-cols-1 justify-items-center">
                 <p className="text-center">Menos de $500</p>
@@ -175,7 +191,11 @@ export default function Component() {
             </CardFooter>
           </Card>
 
-          <Card className="bg-white" isPressable>
+          <Card
+            className="bg-white"
+            isPressable
+            onPress={() => router.push("/products")}
+          >
             <CardHeader className="justify-center">
               <div className="grid grid-cols-1 justify-items-center">
                 <p className="text-center">Más vendidos</p>

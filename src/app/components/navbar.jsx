@@ -73,6 +73,11 @@ function Navbar({ children }) {
                         </Link>
                       </DropdownItem>
                     )}
+                    <DropdownItem color="primary" variant="bordered">
+                      <Link href="/orders" className="text-black">
+                        Mis compras
+                      </Link>
+                    </DropdownItem>
                     <DropdownItem color="danger" onClick={() => logout()}>
                       <a>Cerrar Sesion</a>
                     </DropdownItem>

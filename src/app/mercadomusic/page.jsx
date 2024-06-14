@@ -41,7 +41,7 @@ export default function MercadoMusic() {
     onClose: onSelectPlaylistModalClose,
   } = useDisclosure();
   const [currentTrack, setCurrentTrack] = useState(0);
-  const { user, userDB } = useAuth();
+  const { user, userDB, logout } = useAuth();
   const [playlists, setPlaylists] = useState([]);
   const [currentPlaylist, setCurrentPlaylist] = useState([
     {

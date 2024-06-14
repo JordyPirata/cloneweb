@@ -95,6 +95,8 @@ function Register() {
                 onChange={handleChange}
               />
               <Input
+                id="confirmPass"
+                onChange={(e) => setConfirmPass(e.target.value)}
                 value={confirmPass}
                 type="password"
                 placeholder="Repetir contraseña"
@@ -145,6 +147,7 @@ function Register() {
             />
             <Input
               value={confirmPass}
+              id="confirmPass"
               onChange={(e) => setConfirmPass(e.target.value)}
               type="password"
               placeholder="Repetir contraseña"
