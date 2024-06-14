@@ -30,6 +30,7 @@ import {
   getDownloadURL,
   getBytes,
   ref,
+  uploadBytesResumable,
 } from "firebase/storage";
 import { delay } from "framer-motion";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -568,3 +569,112 @@ export async function fetchOrders() {
     throw new Error("Error fetching orders: + " + error);
   }
 }
+
+export const addPlaylist = async (name, userId) => {
+  try {
+    const docRef = await addDoc(collection(db, "playlists"), {
+      name: name,
+      userId: userId,
+      songs: [],
+    });
+    return docRef.id;
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};
+
+export const getPlaylists = async () => {
+  const playlists = [];
+  const querySnapshot = await getDocs(collection(db, "playlists"));
+  querySnapshot.forEach((doc) => {
+    playlists.push({ id: doc.id, ...doc.data() });
+  });
+  return playlists;
+};
+
+export const addSongToPlaylist = async (playlistId, song) => {
+  try {
+    const playlistRef = doc(db, "playlists", playlistId); // Obtener referencia al documento
+    const playlistDoc = await getDoc(playlistRef); // Obtener el documento
+    const playlistData = playlistDoc.data();
+
+    if (!playlistData.songs) {
+      playlistData.songs = []; // Asegurarse de que la propiedad songs existe
+    }
+
+    playlistData.songs.push(song); // Agregar la canción a la lista
+
+    await updateDoc(playlistRef, { songs: playlistData.songs }); // Actualizar el documento
+    console.log("Canción añadida a la playlist:", playlistRef.id);
+  } catch (e) {
+    console.error("Error añadiendo la canción:", e);
+  }
+};
+
+export const uploadMP3File = async (file) => {
+  try {
+    // Quitar la extensión .mp3 del nombre de archivo
+    const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, "");
+
+    // Crear una referencia única para el archivo en Firebase Storage
+    const storageRef = ref(storage, `mp3/${file.name}`);
+
+    // Iniciar la carga del archivo
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    // Monitorear el progreso de la carga (opcional)
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Puedes manejar el progreso aquí si lo deseas
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log(`Progreso de la carga: ${progress}%`);
+      },
+      (error) => {
+        console.error("Error al subir el archivo: ", error);
+        throw error;
+      },
+      async () => {
+        // Si se completó la carga correctamente, obtener la URL de descarga
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log("Archivo MP3 subido correctamente: ", downloadURL);
+
+        // Añadir documento en Firestore con información de la canción
+        try {
+          const docRef = await addDoc(collection(db, "songs"), {
+            title: fileNameWithoutExtension,
+            url: downloadURL,
+            createdAt: new Date(),
+          });
+          console.log("Documento de canción añadido con ID: ", docRef.id);
+        } catch (error) {
+          console.error("Error al añadir documento de canción: ", error);
+          throw error;
+        }
+      }
+    );
+
+    // Puedes devolver algo si lo necesitas, como el estado de la carga o un identificador del archivo
+    return uploadTask;
+  } catch (error) {
+    console.error("Error al subir el archivo MP3: ", error);
+    throw error;
+  }
+};
+
+export const getSongs = async () => {
+  try {
+    const songs = [];
+    const querySnapshot = await getDocs(collection(db, "songs"));
+
+    querySnapshot.forEach((doc) => {
+      songs.push({ id: doc.id, ...doc.data() });
+    });
+
+    return songs;
+  } catch (error) {
+    console.error("Error al obtener las canciones: ", error);
+    throw error;
+  }
+};
