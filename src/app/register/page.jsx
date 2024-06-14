@@ -38,10 +38,10 @@ function Register() {
 
   return (
     <div className="bg-white">
-      <header className="flex justify-between items-center py-2 bg-[#ffe600]">
+      <header className="flex justify-between items-center py-2 bg-white">
         <div>
           <Image
-            src="/LogoMercadoLibre.png"
+            src="\Wish-Logo.png"
             alt="logo"
             width={125}
             height={125}
