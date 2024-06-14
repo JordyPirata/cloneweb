@@ -1,8 +1,18 @@
-import { Button, Image, Input } from "@nextui-org/react";
+import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Image,
+  Input,
+} from "@nextui-org/react";
 import Link from "next/link";
 import React from "react";
+import { useAuth } from "../lib/context/authContext";
 
 function Navbar({ children }) {
+  const { user, userDB, logout } = useAuth();
   return (
     <div className="bg-gradient-to-b from-[#ffe600] via-slate-50 to-slate-50">
       <div className="container mx-auto px-4 min-h-screen">
@@ -23,12 +33,34 @@ function Navbar({ children }) {
             />
           </div>
           <div className="flex items-center space-x-4">
-            <Link href="#" className="text-black">
-              Crea tu cuenta
-            </Link>
-            <Link href="#" className="text-black">
-              Ingresa
-            </Link>
+            {user ? (
+              <div>
+                <Dropdown>
+                  <DropdownTrigger>
+                    <p className="text-black">{userDB.name}</p>
+                  </DropdownTrigger>
+                  <DropdownMenu>
+                    <DropdownItem color="primary" variant="bordered">
+                      <Link href="/profile" className="text-black">
+                        Mi perfil
+                      </Link>
+                    </DropdownItem>
+                    <DropdownItem color="danger" onClick={() => logout()}>
+                      <a>Cerrar Sesion</a>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+            ) : (
+              <div>
+                <Link href="/register" className="text-black">
+                  Crea tu cuenta
+                </Link>
+                <Link href="/login" className="text-black">
+                  Ingresa
+                </Link>
+              </div>
+            )}
             <Link href="#" className="text-black">
               Mis compras
             </Link>
@@ -40,29 +72,25 @@ function Navbar({ children }) {
         <nav className="flex justify-between items-center py-2">
           <div className="flex space-x-4">
             <Link href="#" className="text-black" prefetch={false}>
-              Categorías
+              Productos
             </Link>
             <Link href="#" className="text-black" prefetch={false}>
-              Ofertas
-            </Link>
-            <Link href="#" className="text-black" prefetch={false}>
-              Historial
-            </Link>
-            <Link href="#" className="text-black" prefetch={false}>
-              Supermercado
-            </Link>
-            <Link href="#" className="text-black" prefetch={false}>
-              Moda
-            </Link>
-            <Link href="#" className="text-black" prefetch={false}>
-              Mercado Play
+              Mercado Music
             </Link>
           </div>
           <div className="flex items-center space-x-4">
-            <Link href="#" className="text-black" prefetch={false}>
+            <Link
+              href="https://www.mercadolibre.com.mx/vender"
+              className="text-black"
+              prefetch={false}
+            >
               Vender
             </Link>
-            <Link href="#" className="text-black" prefetch={false}>
+            <Link
+              href="https://www.mercadolibre.com.mx/ayuda"
+              className="text-black"
+              prefetch={false}
+            >
               Ayuda
             </Link>
           </div>
