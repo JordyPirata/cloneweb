@@ -4,8 +4,9 @@ import { IconButton, Slider } from "@material-ui/core";
 import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@material-ui/icons";
 import ShuffleIcon from "@material-ui/icons/Shuffle";
 import RepeatIcon from "@material-ui/icons/Repeat";
+import VolumeUp from "@material-ui/icons/VolumeUp";
 
-const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
+const AudioPlayer = ({ playlist, initialTrack = 0, handleSelect }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [trackInfo, setTrackInfo] = useState({});
@@ -13,7 +14,7 @@ const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
   const [isShuffle, setIsShuffle] = useState(false);
   const [isRepeat, setIsRepeat] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [volume, setVolume] = useState(100); // Default volume to 100%
+  const [volume, setVolume] = useState(1);
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -49,6 +50,10 @@ const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
     }
   }, [currentTrack]);
 
+  useEffect(() => {
+    setCurrentTrack(initialTrack);
+  }, [initialTrack]);
+
   const togglePlayPause = () => {
     const audio = audioRef.current;
     if (isPlaying) {
@@ -68,7 +73,7 @@ const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
   const handleVolumeChange = (event, newValue) => {
     const audio = audioRef.current;
     audio.volume = newValue / 100;
-    setVolume(newValue);
+    setVolume(newValue / 100);
   };
 
   const handleNext = () => {
@@ -95,10 +100,10 @@ const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
     setIsRepeat((prev) => !prev);
   };
 
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
   return (
@@ -115,7 +120,7 @@ const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
         <h2>{trackInfo.title}</h2>
         <p>
           Duration:{" "}
-          {trackInfo.duration ? formatTime(trackInfo.duration) : "0:00"} minutes
+          {trackInfo.duration ? formatTime(trackInfo.duration) : "0:00"}
         </p>
       </div>
       <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
@@ -133,21 +138,16 @@ const AudioPlayer = ({ playlist, initialTrack = 0 }) => {
           onChange={handleProgressChange}
           style={{ flex: 1 }}
         />
-        <p className="ml-2"> {formatTime(currentTime)}</p>
-        <IconButton onClick={toggleShuffle} variant="ghost" size="icon">
-          <ShuffleIcon
-            className="w-6 h-6"
-            color={isShuffle ? "primary" : "inherit"}
-          />
+        <p className="ml-4 ">{formatTime(currentTime)}</p>
+        <IconButton onClick={toggleShuffle}>
+          <ShuffleIcon color={isShuffle ? "primary" : "inherit"} />
         </IconButton>
-        <IconButton onClick={toggleRepeat} variant="ghost" size="icon">
-          <RepeatIcon
-            className="w-6 h-6"
-            color={isRepeat ? "primary" : "inherit"}
-          />
+        <IconButton onClick={toggleRepeat}>
+          <RepeatIcon color={isRepeat ? "primary" : "inherit"} />
         </IconButton>
+        <VolumeUp />
         <Slider
-          value={volume}
+          value={volume * 100}
           onChange={handleVolumeChange}
           style={{ width: 100 }}
         />

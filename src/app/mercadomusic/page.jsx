@@ -274,7 +274,11 @@ export default function MercadoMusic() {
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold">Escuchando ahora</h2>
           </div>
-          <AudioPlayer playlist={currentPlaylist} currentTrack={currentTrack} />
+          <AudioPlayer
+            playlist={currentPlaylist}
+            initialTrack={currentTrack}
+            handleSelect={handleSelectTrack}
+          />
         </div>
         {/*Muestra de las canciones dentro de la playlist */}
         <div className="bg-white text-black  border-x-large border-y-large border-y-gray-300 border-x-gray-300 rounded-lg p-4 space-y-4">
