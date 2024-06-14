@@ -9,10 +9,11 @@ import {
   CardHeader,
   Chip,
   CircularProgress,
+  Image,
   Input,
   Progress,
+  useDisclosure,
 } from "@nextui-org/react";
-import Image from "next/image";
 import { LowPriceIcon } from "./components/icons/low-price-product";
 import { BuyProtected } from "./components/icons/buy-protected";
 import { TopSale } from "./components/icons/top-sale";
@@ -20,8 +21,11 @@ import { RegistrationDa } from "./components/icons/registration-da";
 import { Location } from "./components/icons/location";
 import { LogoMercadoLibre } from "./components/icons/LogoMercadoLibre";
 import { useEffect, useState } from "react";
-import Carousel from "./components/carousel";
+import CarouselLarge from "./components/carouselLarge";
 import Navbar from "./components/navbar";
+import { fetchProducts } from "./lib/firebase/firebase";
+import ModalDetailsProduct from "./products/Components/ModalDetailsProduct";
+import { useCart } from "./lib/context/CartContext";
 
 export default function Component() {
   const [hydrated, setHydrated] = useState(false);
@@ -30,9 +34,71 @@ export default function Component() {
     "https://http2.mlstatic.com/storage/splinter-admin/1717431495033-mercadolibredesktopsinfechas.png",
   ];
 
+  const [products, setProducts] = useState([]);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const { addToCart, cart } = useCart();
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const showAlert = (message, delay) => {
+    setAlertMessage(message);
+    setTimeout(() => {
+      setAlertMessage("");
+    }, delay); // El mensaje desaparecerá después de 3 segundos
+  };
+
   useEffect(() => {
+    const fetchProductsData = async () => {
+      try {
+        const productsData = await fetchProducts();
+        setProducts(productsData);
+      } catch (error) {
+        console.error("Error fetching users data:", error);
+      }
+    };
+    fetchProductsData();
     setHydrated(true);
   }, []);
+
+  const handleAddToCart = (product) => {
+    console.log("product", product);
+    if (!product) return;
+
+    const maxQuantity = product.data.amount; // Máximo de productos que se pueden agregar al carrito
+    const cartItem = cart.find((item) => item.itemId === product.uid); // Buscar si el producto ya está en el carrito
+
+    if (cartItem) {
+      // Si el producto ya está en el carrito, verificar si se puede agregar más
+      if (cartItem.quantity >= maxQuantity) {
+        showAlert(
+          "No puedes añadir más de este producto. Solo hay " +
+            maxQuantity +
+            " en stock. Y ya tienes " +
+            cartItem.quantity +
+            " en el carrito.",
+          3000
+        );
+        return;
+      }
+    }
+
+    if (product.data.amount <= 0) {
+      showAlert("No hay suficiente stock para añadir este producto.", 1000);
+      return;
+    }
+
+    addToCart(product.uid);
+  };
+
+  const handleViewDetails = (product) => {
+    setSelectedProduct(product);
+    onOpen();
+  };
+
+  const handleCloseModal = () => {
+    setSelectedProduct(null);
+    onOpenChange(false);
+  };
 
   if (!hydrated) {
     return (
@@ -51,8 +117,9 @@ export default function Component() {
     <div>
       <Navbar>
         <div className="py-8">
-          <Carousel images={images} size={5000} />
+          <CarouselLarge images={images} size={5000} />
         </div>
+
         <div className="grid grid-cols-5 gap-4 pb-8">
           <Card className="bg-white" isPressable>
             <CardHeader className="justify-center">
@@ -147,42 +214,53 @@ export default function Component() {
         </div>
         <section className="bg-white p-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">Oferta del día</h2>
-            <Button variant="ghost">Ofertas</Button>
-            <Button variant="ghost">Mostrar todas las ofertas</Button>
+            <h2 className="text-2xl font-bold">Productos en venta</h2>
             <LayoutGridIcon className="text-black" />
           </div>
+
           <div className="grid grid-cols-4 gap-4 mt-4">
-            {[...Array(4)].map((_, index) => (
+            {products.map((product, index) => (
               <Card key={index} className="w-full">
                 <CardBody>
                   <div className="grid grid-cols-1 justify-items-center">
                     <Image
-                      src="/placeholder.svg"
+                      src={
+                        product.data.productPictures &&
+                        product.data.productPictures.image0
+                          ? product.data.productPictures.image0
+                          : "/no_image.svg"
+                      }
                       width={200}
                       height={200}
                       alt="Product"
                     />
-                    <p>Product Name</p>
-                    <p>$ Price</p>
-                    <Button variant="ghost">Ver producto</Button>
+                    <p>{product.data.name}</p>
+                    <p>${product.data.publicPrice}</p>
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleViewDetails(product)}
+                    >
+                      Ver producto
+                    </Button>
                   </div>
                 </CardBody>
               </Card>
             ))}
+            {selectedProduct && (
+              <ModalDetailsProduct
+                product={selectedProduct}
+                isOpen={isOpen}
+                onClose={handleCloseModal}
+                onAddCart={handleAddToCart}
+              />
+            )}
+            {alertMessage && (
+              <div className="opacity-75 fixed text-sm top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-xl p-8 shadow-lg z-50">
+                {alertMessage}
+              </div>
+            )}
           </div>
         </section>
-        <footer className="py-4">
-          <p className="text-center text-sm text-black">Oferta del día</p>
-          <div className="flex justify-center space-x-4">
-            <Link href="#" className="text-sm text-black" prefetch={false}>
-              Ofertas
-            </Link>
-            <Link href="#" className="text-sm text-black" prefetch={false}>
-              Mostrar todas las ofertas
-            </Link>
-          </div>
-        </footer>
       </Navbar>
     </div>
   );

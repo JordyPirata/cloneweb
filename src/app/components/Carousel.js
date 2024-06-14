@@ -2,7 +2,7 @@
 import { Button, Image } from "@nextui-org/react";
 import { useState } from "react";
 
-const Carousel = ({ images, size }) => {
+const Carousel = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const imageArray = Object.entries(images);
@@ -32,8 +32,6 @@ const Carousel = ({ images, size }) => {
             >
               <Image
                 src={value}
-                width={size}
-                height={size * 0.6}
                 alt={`Slide ${index}`}
                 className={`w-full h-auto ${
                   index === currentIndex ? "" : "hidden"
@@ -45,13 +43,13 @@ const Carousel = ({ images, size }) => {
       </div>
       <button
         onClick={prevSlide}
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-transparent hover:bg-white hover:text-black text-white px-4 py-2 rounded-xl"
+        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-4 py-2 rounded-xl"
       >
         {"<"}
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-transparent hover:bg-white hover:text-black text-white px-4 py-2 rounded-xl"
+        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-4 py-2 rounded-xl"
       >
         {">"}
       </button>

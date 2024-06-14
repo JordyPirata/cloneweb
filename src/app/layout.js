@@ -5,6 +5,7 @@ import Navbar from "./components/navbar";
 import { WindowSizeProvider } from "./lib/context/WindowSizeContext";
 import { AuthProvider } from "./lib/context/authContext";
 import { CartProvider } from "./lib/context/CartContext";
+import Footer from "./components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,10 @@ export default function RootLayout({ children }) {
         <CartProvider>
           <body className={inter.className}>
             <Providers>
-              <WindowSizeProvider>{children}</WindowSizeProvider>
+              <WindowSizeProvider>
+                {children}
+                <Footer />
+              </WindowSizeProvider>
             </Providers>
           </body>
         </CartProvider>

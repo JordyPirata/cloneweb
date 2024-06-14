@@ -1,3 +1,4 @@
+"use client";
 import {
   Button,
   Dropdown,
@@ -6,19 +7,39 @@ import {
   DropdownTrigger,
   Image,
   Input,
+  useDisclosure,
 } from "@nextui-org/react";
 import Link from "next/link";
 import React from "react";
 import { useAuth } from "../lib/context/authContext";
+import { useRouter } from "next/navigation";
+import { CartIcon } from "./icons/CartIcon";
+import { useCart } from "../lib/context/CartContext";
+import Cart from "./Cart";
 
 function Navbar({ children }) {
   const { user, userDB, logout } = useAuth();
+  const router = useRouter();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { cart } = useCart();
+
+  const handleOpenCart = () => {
+    onOpen();
+  };
+
+  const handleCloseCart = () => {
+    onOpenChange(false);
+  };
+
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+
   return (
     <div className="bg-gradient-to-b from-[#ffe600] via-slate-50 to-slate-50">
       <div className="container mx-auto px-4 min-h-screen">
         <header className="flex justify-between items-center py-4">
           <div>
             <Image
+              onClick={() => router.push("/")}
               src="/LogoMercadoLibre.png"
               alt="logo"
               width={200}
@@ -45,6 +66,13 @@ function Navbar({ children }) {
                         Mi perfil
                       </Link>
                     </DropdownItem>
+                    {userDB.userType === "admin" && (
+                      <DropdownItem color="primary" variant="solid">
+                        <Link href="/admin" className="text-black">
+                          Administración
+                        </Link>
+                      </DropdownItem>
+                    )}
                     <DropdownItem color="danger" onClick={() => logout()}>
                       <a>Cerrar Sesion</a>
                     </DropdownItem>
@@ -61,9 +89,16 @@ function Navbar({ children }) {
                 </Link>
               </div>
             )}
-            <Link href="#" className="text-black">
-              Mis compras
-            </Link>
+            <Button
+              variant="light"
+              onClick={handleOpenCart}
+              className="text-black"
+            >
+              <div className="  bg-gray-600 text-white rounded-full w-5 h-5 flex justify-center items-center">
+                {totalItems}
+              </div>
+              <CartIcon size="30px" />
+            </Button>
             <Button variant="outline" className="bg-white">
               Suscríbete
             </Button>
@@ -71,7 +106,7 @@ function Navbar({ children }) {
         </header>
         <nav className="flex justify-between items-center py-2">
           <div className="flex space-x-4">
-            <Link href="#" className="text-black" prefetch={false}>
+            <Link href="/products" className="text-black" prefetch={false}>
               Productos
             </Link>
             <Link href="#" className="text-black" prefetch={false}>
@@ -95,6 +130,7 @@ function Navbar({ children }) {
             </Link>
           </div>
         </nav>
+        <Cart isOpen={isOpen} onClose={handleCloseCart} />
         {children}
       </div>
     </div>

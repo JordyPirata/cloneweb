@@ -1,3 +1,9 @@
+import { ProtectedRoute } from "../lib/context/ProtectedRoute";
+
 export default function Layout({ children }) {
-  return <div className="layout">{children}</div>;
+  return (
+    <ProtectedRoute login={true}>
+      <div className="layout">{children}</div>
+    </ProtectedRoute>
+  );
 }

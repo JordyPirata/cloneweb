@@ -32,7 +32,7 @@ export function ProtectedRoute({ children, login, admin }) {
   }
 
   if (login) {
-    if (user && user.emailVerified) {
+    if (user) {
       router.push("/"); // Utiliza router.push en lugar de return router.push
       return null; // Retorno nulo para evitar la renderización de los children antes de la redirección
     }
@@ -40,7 +40,7 @@ export function ProtectedRoute({ children, login, admin }) {
   }
 
   if (admin && user) {
-    if (user && user.emailVerified && userDB.userType === "admin") {
+    if (user && userDB.userType === "admin") {
       return <>{children}</>;
     }
     alert("No tienes permisos para acceder a esta página");
@@ -56,15 +56,6 @@ export function ProtectedRoute({ children, login, admin }) {
   if (userDB.blocked === true) {
     alert("Tu cuenta ha sido bloqueada");
     auth.signOut();
-    router.push("/login");
-    return null;
-  }
-
-  if (!user.emailVerified) {
-    if (login === true) {
-      return <>{children}</>;
-    }
-    alert("Verifica tu correo electrónico para continuar");
     router.push("/login");
     return null;
   }
