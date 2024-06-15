@@ -34,7 +34,7 @@ function Navbar({ children }) {
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
   return (
-    <div className="bg-gradient-to-b from-[#ffe600] via-slate-50 to-slate-50">
+    <div className="bg-white">
       <div className="container mx-auto px-4 min-h-screen">
         <header className="flex justify-between items-center py-4">
           <div>
