@@ -174,7 +174,9 @@ const Cart = ({ isOpen, onClose }) => {
             ))
           ) : (
             <div className="grid grid-cols-1 place-items-center">
-              <Image src="/LogoMercadoLibre.png" alt="Logo LogoMercadoLibre" />
+              <div style={{width: "100px"}}>
+              <Image src="/Wish-Logo.png" alt="Logo LogoMercadoLibre" />
+              </div>
               <span>
                 Tu carrito se encuentra vacío pero no te preocupes, puedes
                 explorar más productos

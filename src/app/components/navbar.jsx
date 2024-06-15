@@ -126,14 +126,7 @@ function Navbar({ children }) {
           </div>
           <div className="flex items-center space-x-4">
             <Link
-              href="https://www.mercadolibre.com.mx/vender"
-              className="text-black"
-              prefetch={false}
-            >
-              Vender
-            </Link>
-            <Link
-              href="https://www.mercadolibre.com.mx/ayuda"
+              href="https://www.wish.com/get-help"
               className="text-black"
               prefetch={false}
             >
