@@ -31,8 +31,8 @@ import { useRouter } from "next/navigation";
 export default function Component() {
   const [hydrated, setHydrated] = useState(false);
   const images = [
-    "https://http2.mlstatic.com/storage/splinter-admin/o:f_webp,q_auto:best/1717445259308-abr24mlmhotsalepreviakvcelebritydescuentomsidesktopx340px2x.png",
-    "https://http2.mlstatic.com/storage/splinter-admin/1717431495033-mercadolibredesktopsinfechas.png",
+    "https://main.cdn.wish.com/web/84b24f0fd4e9/img/first_purchase_incentive/desktop_banner_background.png",
+    "https://canary.contestimg.wish.com/api/file/fetch?general_image_name=zb-iim-6660f1f496208e44c68369d1-1717629428-2024_05_Pool_Day_Fashion_Favorites_Web_Banner_Primary_Promo_Desktop_HP1_Template.png",
   ];
 
   const [products, setProducts] = useState([]);
