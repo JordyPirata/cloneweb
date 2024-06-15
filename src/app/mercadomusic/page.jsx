@@ -161,15 +161,15 @@ export default function MercadoMusic() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-b from-[#ffe600] via-slate-50 to-slate-50 text-white">
-      <header className="bg-[#ffe600] py-4 px-6 flex items-center justify-between">
+    <div className="flex flex-col h-screen bg-gradient-to-b from-gray via-slate-50 to-slate-50 text-white">
+      <header className="bg-gray py-4 px-6 flex items-center justify-between">
         <nav className="flex items-center space-x-6">
           <Link
             href="/"
             className="font-bold text-black text-lg"
             prefetch={false}
           >
-            MercadoMusic
+            Wish Music
           </Link>
         </nav>
         <div>

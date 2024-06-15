@@ -42,11 +42,11 @@ function Login() {
   };
 
   return (
-    <div className="bg-white">
-      <header className="flex justify-between items-center py-2 bg-[#ffe600]">
+    <div className="bg-gray-100">
+      <header className="flex justify-between items-center py-2 bg-white">
         <div>
           <Image
-            src="/LogoMercadoLibre.png"
+            src="\Wish-Logo.png"
             alt="logo"
             width={125}
             height={125}
@@ -58,7 +58,7 @@ function Login() {
         <div className="bg-white container mx-auto px-4 min-h-screen ">
           <div className="container mx-auto px-4 min-h-screen text-center py-4">
             <h1 className="font-semibold text-2xl">
-              Ingresa tu e-mail, teléfono o usuario de Mercado Libre
+              Ingresa tu e-mail, teléfono o usuario de Wish
             </h1>
             <div className="flex justify-center items-center py-4">
               <Input
@@ -103,12 +103,12 @@ function Login() {
           </div>
         </div>
       ) : (
-        <div className="bg-white container mx-auto px-8 min-h-screen">
+        <div className="bg-gray-100 container mx-auto px-8 min-h-screen">
           <div className=" mx-auto px-4 min-h-screen mt-14">
             <div className="grid grid-cols-2 px-4 min-h-screen py-4">
               <div className=" justify-center items-start w-2/3">
                 <h1 className="text-3xl">
-                  Ingresa tu e-mail, teléfono o usuario de Mercado Libre
+                  Ingresa tu e-mail, teléfono o usuario de Wish
                 </h1>
                 <Divider className="w-3/4 mt-5 mb-5" />
                 <div className=" justify-start items-start text-start w-3/4">
