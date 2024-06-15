@@ -42,15 +42,15 @@ function Navbar({ children }) {
               onClick={() => router.push("/")}
               src="\Wish-Logo.png"
               alt="logo"
-              width={200}
-              height={200}
+              width={75}
+              height={75}
             />
           </div>
           <div className="flex-1 px-4">
             <Input
               type="search"
-              placeholder="Buscar productos, marcas y más..."
-              className="w-full"
+              placeholder="¿Qué quieres encontrar?"
+              className="w-[80%]"
             />
           </div>
           <div className="flex items-center space-x-4">
@@ -87,7 +87,7 @@ function Navbar({ children }) {
             ) : (
               <div>
                 <Link href="/register" className="text-black">
-                  Crea tu cuenta
+                  Incia sesion
                 </Link>
                 <Link href="/login" className="text-black">
                   Ingresa
