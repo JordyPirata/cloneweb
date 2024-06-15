@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Wish",
-  description: "25 años de Mercado Libre",
+  description: "25 años de Wish",
   image: "Wish-Logo.png",
 };
 
