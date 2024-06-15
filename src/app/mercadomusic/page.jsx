@@ -200,10 +200,11 @@ export default function MercadoMusic() {
             </div>
           ) : (
             <div>
-              <Link href="/register" className="text-black">
+              <Link href="/register" className="text-blue-500" style={{ marginLeft: "10px" }}>
                 Crea tu cuenta
+                
               </Link>
-              <Link href="/login" className="text-black">
+              <Link href="/login" className="text-blue-500"style={{ marginLeft: "10px" }}>
                 Ingresa
               </Link>
             </div>
