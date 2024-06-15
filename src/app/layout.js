@@ -10,9 +10,9 @@ import Footer from "./components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Mercado Libre",
+  title: "Wish",
   description: "25 años de Mercado Libre",
-  image: "/LogoMercadoLibre.png",
+  image: "Wish-Logo.png",
 };
 
 export default function RootLayout({ children }) {

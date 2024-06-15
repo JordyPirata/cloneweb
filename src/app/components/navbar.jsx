@@ -40,7 +40,7 @@ function Navbar({ children }) {
           <div>
             <Image
               onClick={() => router.push("/")}
-              src="/LogoMercadoLibre.png"
+              src="\Wish-Logo.png"
               alt="logo"
               width={200}
               height={200}
@@ -104,9 +104,6 @@ function Navbar({ children }) {
               </div>
               <CartIcon size="30px" />
             </Button>
-            <Button variant="outline" className="bg-white">
-              Suscríbete
-            </Button>
           </div>
         </header>
         <nav className="flex justify-between items-center py-2">
@@ -115,7 +112,7 @@ function Navbar({ children }) {
               Productos
             </Link>
             <Link href="/mercadomusic" className="text-black" prefetch={false}>
-              Mercado Music
+              Music
             </Link>
           </div>
           <div className="flex items-center space-x-4">
