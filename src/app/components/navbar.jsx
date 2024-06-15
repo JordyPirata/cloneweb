@@ -11,6 +11,8 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import React from "react";
+import { UserIcon } from "./icons/UserIcon";
+import { SearchIcon } from "./icons/SearchIcon";
 import { useAuth } from "../lib/context/authContext";
 import { useRouter } from "next/navigation";
 import { CartIcon } from "./icons/CartIcon";
@@ -46,12 +48,15 @@ function Navbar({ children }) {
               height={75}
             />
           </div>
-          <div className="flex-1 px-4">
-            <Input
-              type="search"
-              placeholder="¿Qué quieres encontrar?"
-              className="w-[80%]"
-            />
+          <div className="relative flex-1 px-4">
+            <div className="relative">
+              <Input
+                type="search"
+                placeholder="¿Qué quieres encontrar?"
+                className="w[80%]"
+              />
+              <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500 pointer-events-none" />
+            </div>
           </div>
           <div className="flex items-center space-x-4">
             {user ? (
@@ -86,10 +91,14 @@ function Navbar({ children }) {
               </div>
             ) : (
               <div>
-                <Link href="/register" className="text-black">
-                  Incia sesion
+                <Link href="/register" className="text-blue-400">
+                  Inicia sesión
                 </Link>
-                <Link href="/login" className="text-black">
+                <Link
+                  href="/login"
+                  className="text-blue-400"
+                  style={{ marginLeft: "10px" }}
+                >
                   Ingresa
                 </Link>
               </div>
